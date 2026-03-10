@@ -1,7 +1,7 @@
 import { FC, useState, SyntheticEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { forgotPasswordApi } from '@api';
+import { forgotPasswordApi } from '../../utils/burger-api'; // Используем прямой путь или твой алиас @api
 import { ForgotPasswordUI } from '@ui-pages';
 
 export const ForgotPassword: FC = () => {
@@ -16,10 +16,15 @@ export const ForgotPassword: FC = () => {
     setError(null);
     forgotPasswordApi({ email })
       .then(() => {
+        // Устанавливаем флаг, что мы прошли этот этап (нужно для защиты следующей страницы)
         localStorage.setItem('resetPassword', 'true');
+        // Переходим на страницу ввода нового пароля
         navigate('/reset-password', { replace: true });
       })
-      .catch((err) => setError(err));
+      .catch((err) => {
+        // Если API вернуло ошибку, сохраняем её, чтобы показать пользователю
+        setError(err);
+      });
   };
 
   return (

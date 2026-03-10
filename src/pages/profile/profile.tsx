@@ -1,19 +1,22 @@
 import { ProfileUI } from '@ui-pages';
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from '../../services/store';
+import { updateUser } from '../../services/slices/userSlice';
 
 export const Profile: FC = () => {
-  /** TODO: взять переменную из стора */
-  const user = {
-    name: '',
-    email: ''
-  };
+  const dispatch = useDispatch();
 
+  // Берем актуальные данные пользователя из Redux
+  const user = useSelector((state) => state.user.data);
+
+  // Локальное состояние полей формы
   const [formValue, setFormValue] = useState({
-    name: user.name,
-    email: user.email,
+    name: user?.name || '',
+    email: user?.email || '',
     password: ''
   });
 
+  // Синхронизируем форму, если данные пользователя в сторе обновились
   useEffect(() => {
     setFormValue((prevState) => ({
       ...prevState,
@@ -22,6 +25,7 @@ export const Profile: FC = () => {
     }));
   }, [user]);
 
+  // Кнопки Сохранить/Отмена видны только если данные в инпутах отличаются от стора
   const isFormChanged =
     formValue.name !== user?.name ||
     formValue.email !== user?.email ||
@@ -29,13 +33,16 @@ export const Profile: FC = () => {
 
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
+    // Отправляем изменения на сервер
+    dispatch(updateUser(formValue));
   };
 
   const handleCancel = (e: SyntheticEvent) => {
     e.preventDefault();
+    // Сбрасываем форму к исходным данным пользователя
     setFormValue({
-      name: user.name,
-      email: user.email,
+      name: user?.name || '',
+      email: user?.email || '',
       password: ''
     });
   };
@@ -56,6 +63,4 @@ export const Profile: FC = () => {
       handleInputChange={handleInputChange}
     />
   );
-
-  return null;
 };
