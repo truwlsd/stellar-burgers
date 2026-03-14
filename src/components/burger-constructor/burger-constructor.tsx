@@ -1,9 +1,14 @@
 import { FC, useMemo } from 'react';
-import { TConstructorIngredient, TIngredient } from '@utils-types';
+import { TConstructorIngredient } from '@utils-types';
 import { BurgerConstructorUI } from '@ui';
 import { useSelector, useDispatch } from '../../services/store';
 import { useNavigate } from 'react-router-dom';
-import { clearConstructor } from '../../services/slices/constructorSlice';
+import {
+  clearConstructor,
+  removeIngredient,
+  moveIngredientUp,
+  moveIngredientDown
+} from '../../services/slices/constructorSlice';
 import { placeOrder, clearOrder } from '../../services/slices/orderSlice';
 
 export const BurgerConstructor: FC = () => {
@@ -23,7 +28,7 @@ export const BurgerConstructor: FC = () => {
 
     const orderData = [
       bun._id,
-      ...ingredients.map((item: TConstructorIngredient) => item._id),
+      ...ingredients.map((item) => item._id),
       bun._id
     ];
 
@@ -37,6 +42,18 @@ export const BurgerConstructor: FC = () => {
 
   const closeOrderModal = () => {
     dispatch(clearOrder());
+  };
+
+  const handleMoveUp = (index: number) => {
+    dispatch(moveIngredientUp(index));
+  };
+
+  const handleMoveDown = (index: number) => {
+    dispatch(moveIngredientDown(index));
+  };
+
+  const handleClose = (item: TConstructorIngredient) => {
+    dispatch(removeIngredient(item.id));
   };
 
   const price = useMemo(
@@ -57,6 +74,9 @@ export const BurgerConstructor: FC = () => {
       orderModalData={orderModalData}
       onOrderClick={onOrderClick}
       closeOrderModal={closeOrderModal}
+      handleMoveUp={handleMoveUp}
+      handleMoveDown={handleMoveDown}
+      handleClose={handleClose}
     />
   );
 };
