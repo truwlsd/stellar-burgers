@@ -1,7 +1,7 @@
 import { FC, SyntheticEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { resetPasswordApi } from '@api';
+import { resetPasswordApi } from '../../utils/burger-api'; // Путь к API
 import { ResetPasswordUI } from '@ui-pages';
 
 export const ResetPassword: FC = () => {
@@ -10,18 +10,25 @@ export const ResetPassword: FC = () => {
   const [token, setToken] = useState('');
   const [error, setError] = useState<Error | null>(null);
 
+  // ФУНКЦИЯ ОТПРАВКИ ФОРМЫ
   const handleSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
     setError(null);
     resetPasswordApi({ password, token })
       .then(() => {
+        // Очищаем флаг после успешного сброса
         localStorage.removeItem('resetPassword');
-        navigate('/login');
+        // Отправляем пользователя на вход
+        navigate('/login', { replace: true });
       })
-      .catch((err) => setError(err));
+      .catch((err) => {
+        setError(err);
+      });
   };
 
+  // ЗАЩИТА СТРАНИЦЫ
   useEffect(() => {
+    // Если пользователь попал сюда не со страницы forgot-password — выкидываем его обратно
     if (!localStorage.getItem('resetPassword')) {
       navigate('/forgot-password', { replace: true });
     }
