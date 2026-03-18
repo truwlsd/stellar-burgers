@@ -12,7 +12,8 @@ import userReducer from './slices/userSlice';
 import feedReducer from './slices/feedSlice';
 import userOrdersReducer from './slices/userOrdersSlice';
 
-const rootReducer = combineReducers({
+// ДОБАВЛЕН export: теперь мы можем импортировать rootReducer в файлы тестов
+export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
   burgerConstructor: constructorReducer,
   order: orderReducer,

@@ -93,6 +93,7 @@
     "lint:fix": "npm run lint -- --fix",
     "format": "prettier ./src --write",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "cypress:open": "cypress open",
     "cypress:run": "cypress run"
   },
