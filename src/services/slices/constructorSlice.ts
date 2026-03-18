@@ -7,7 +7,8 @@ interface ConstructorState {
   ingredients: TConstructorIngredient[];
 }
 
-const initialState: ConstructorState = {
+// ДОБАВЛЕН export: теперь тесты смогут импортировать этот объект
+export const initialState: ConstructorState = {
   bun: null,
   ingredients: []
 };
