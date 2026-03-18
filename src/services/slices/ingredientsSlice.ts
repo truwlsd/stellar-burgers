@@ -9,7 +9,8 @@ interface IngredientsState {
   error: string | null | undefined;
 }
 
-const initialState: IngredientsState = {
+// ДОБАВЛЕН export: теперь тесты смогут импортировать этот объект
+export const initialState: IngredientsState = {
   ingredients: [],
   loading: false,
   error: null
